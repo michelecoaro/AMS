@@ -14,6 +14,7 @@ import seaborn as sns
 import plotly.express as px
 from sklearn.covariance import MinCovDet
 from sklearn.mixture import GaussianMixture
+import prince
 
 def load_and_prepare_data(file_path):
     """
@@ -596,3 +597,70 @@ def evaluate_model_performance(models, accuracy, auc):
     plt.xticks(rotation=45, ha='right', fontsize=12)
     plt.tight_layout()
     plt.show()
+
+def apply_famd(data, n_components=2, random_state=42):
+    """
+    Applies Factorial Analysis of Mixed Data (FAMD) to the dataset.
+
+    Parameters:
+        data (pd.DataFrame): The input dataset.
+        n_components (int): Number of components for dimensionality reduction.
+        random_state (int): Random state for reproducibility.
+
+    Returns:
+        famd (prince.FAMD): Trained FAMD instance.
+        X_famd (pd.DataFrame): Transformed data with reduced dimensions.
+    """
+    famd = prince.FAMD(
+        n_components=n_components,
+        n_iter=10,
+        copy=True,
+        check_input=True,
+        random_state=random_state,
+        engine="sklearn",
+        handle_unknown="error"  # Same parameter as sklearn.preprocessing.OneHotEncoder
+    )
+    famd = famd.fit(data)
+    X_famd = famd.transform(data)
+    return famd, X_famd
+
+
+def visualize_famd_clusters(X_famd, cluster_labels):
+    """
+    Visualizes clusters on the first two FAMD components.
+
+    Parameters:
+        X_famd (pd.DataFrame): Transformed data with reduced dimensions.
+        cluster_labels (np.ndarray): Cluster labels obtained from clustering.
+    """
+    plt.figure(figsize=(8, 6))
+    plt.scatter(
+        X_famd.iloc[:, 0],
+        X_famd.iloc[:, 1],
+        c=cluster_labels,
+        cmap='viridis',
+        alpha=0.7
+    )
+    plt.title("Clusters visualized after FAMD dimensionality reduction")
+    plt.xlabel("FAMD Component 1")
+    plt.ylabel("FAMD Component 2")
+    plt.colorbar(label='Cluster')
+    plt.show()
+
+
+def apply_kmeans_clustering(X, n_clusters=6, random_state=42):
+    """
+    Applies KMeans clustering to the data.
+
+    Parameters:
+        X (pd.DataFrame or np.ndarray): Input data for clustering.
+        n_clusters (int): Number of clusters.
+        random_state (int): Random state for reproducibility.
+
+    Returns:
+        cluster_labels (np.ndarray): Cluster labels for each data point.
+    """
+    kmeans = KMeans(n_clusters=n_clusters, random_state=random_state)
+    cluster_labels = kmeans.fit_predict(X)
+    return cluster_labels
+
