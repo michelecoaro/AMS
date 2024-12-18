@@ -1,5 +1,6 @@
-Below is an embedded preview of the compiled document:
+The document is available for preview below:
 
-<embed src="michelecoaro/AMS/Casalingo_Coaro_El-Kouch_Zanone.pdf" type="application/pdf" width="100%" height="600px" />
+[Preview the PDF on Google Drive](https://drive.google.com/file/d/1_G0LMu5ytqPGZib5Effo7SV0B6-WowVd/view?usp=share_link)
 
-If the preview doesn't display, you can [view it directly here](michelecoaro/AMS/Casalingo_Coaro_El-Kouch_Zanone.pdf).
+You can also download it directly from this repository:
+[Casalingo_Coaro_El-Kouch_Zanone.pdf](michelecoaro/AMS/Casalingo_Coaro_El-Kouch_Zanone.pdf)
